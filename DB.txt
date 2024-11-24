@@ -1,0 +1,48 @@
+CREATE TABLE Books (
+    BookID INT AUTO_INCREMENT PRIMARY KEY,
+    ISBN VARCHAR(13) UNIQUE NOT NULL,
+    Title VARCHAR(255) NOT NULL,
+    Author VARCHAR(255) NOT NULL,
+    Category VARCHAR(100),
+    Publisher VARCHAR(255),
+    CopiesAvailable INT NOT NULL DEFAULT 0
+);
+
+CREATE TABLE Members (
+    MemberID INT AUTO_INCREMENT PRIMARY KEY,
+    FirstName VARCHAR(100) NOT NULL,
+    LastName VARCHAR(100),
+    Email VARCHAR(255) UNIQUE NOT NULL,
+    Phone VARCHAR(15) UNIQUE,
+    Address VARCHAR(255),
+    MembershipDate DATE NOT NULL
+);
+
+CREATE TABLE Staff (
+    StaffID INT AUTO_INCREMENT PRIMARY KEY,
+    FirstName VARCHAR(100) NOT NULL,
+    LastName VARCHAR(100),
+    Role VARCHAR(50) NOT NULL,
+    Email VARCHAR(255) UNIQUE NOT NULL,
+    Phone VARCHAR(15) UNIQUE
+);
+
+CREATE TABLE Borrowing (
+    TransactionID INT AUTO_INCREMENT PRIMARY KEY,
+    BookID INT,
+    MemberID INT,
+    BorrowDate DATE NOT NULL,
+    DueDate DATE NOT NULL,
+    ReturnDate DATE,
+    Fine DECIMAL(10, 2) DEFAULT 0.00,
+    FOREIGN KEY (BookID) REFERENCES Books(BookID),
+    FOREIGN KEY (MemberID) REFERENCES Members(MemberID)
+);
+
+CREATE TABLE FineDetails (
+    FineID INT AUTO_INCREMENT PRIMARY KEY,
+    TransactionID INT,
+    FineAmount DECIMAL(10, 2) NOT NULL,
+    Reason VARCHAR(255),
+    FOREIGN KEY (TransactionID) REFERENCES Borrowing(TransactionID)
+);
